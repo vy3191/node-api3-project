@@ -7,19 +7,27 @@ router.post('/', (req, res) => {
   // do your magic!
 });
 
-router.post('/:id/posts', (req, res) => {
+router.post('/:id/posts', async (req, res) => {
   // do your magic!
+  
 });
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   // do your magic!
+      try {
+        const users = await db.get();
+        res.status(200).json(users);
+    } catch(error) {
+        res.status(500).json({msg: error})
+    }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
   // do your magic!
+    res.status(200).json(req.user);
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts',  (req, res) => {
   // do your magic!
 });
 
@@ -34,8 +42,7 @@ router.put('/:id', (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-  const {id} = req.params;
-  db.getById(id)
+  db.getById(req.params.id)
     .then( (user) => {
        if(user) {
           req.user = user;
