@@ -27,8 +27,14 @@ router.get('/:id', validateUserId, (req, res) => {
     res.status(200).json(req.user);
 });
 
-router.get('/:id/posts',  (req, res) => {
+router.get('/:id/posts', validateUserId,  async (req, res) => {
   // do your magic!
+    try {
+       const posts = await db.getUserPosts(req.user.id)
+       res.status(200).json(posts)
+    } catch(error) {
+       res.status(500).json({msg:error});
+    }
 });
 
 router.delete('/:id', (req, res) => {
