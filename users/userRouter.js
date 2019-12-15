@@ -50,8 +50,18 @@ router.delete('/:id', validateUserId, async (req, res) => {
    }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id',validateUser, validateUserId, async (req, res) => {
   // do your magic!
+  try {
+    const body = {
+      name:req.body.name
+    }    
+    await db.update(req.user.id, body) ;
+    const user = await db.getById(req.user.id);
+    res.status(201).json(user);
+  } catch(error) {
+    res.status(500).json({msg:error});
+  }
 });
 
 //custom middleware
