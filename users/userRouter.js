@@ -37,8 +37,17 @@ router.get('/:id/posts', validateUserId,  async (req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, async (req, res) => {
   // do your magic!
+   try {
+     console.log(req.user)
+     const deletedUserDetails = await db.remove(req.params.id);
+     console.log('user', deletedUserDetails)
+     res.status(201).json(deletedUserDetails);
+     
+   } catch(error) {
+     res.status(500).json({msg:error});
+   }
 });
 
 router.put('/:id', (req, res) => {
