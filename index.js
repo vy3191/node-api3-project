@@ -2,10 +2,14 @@
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const { logger } = require("./middleware/logger");
 
 const PORT = 8000;
 const app = express();
 
+app.use(helmet());
+app.use(morgan("tiny"));
+app.use(logger);
 app.use(express.json());
 
 app.get("/", (req,res) => {
