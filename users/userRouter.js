@@ -1,12 +1,14 @@
 const express = require('express');
 const db = require("./userDb");
+const posts = require("../posts/postDb");
 
-const router = express.Router();
+const router = express.Router({mergeParams:true});
 
 router.post('/',validateUser, async (req, res) => {
    
   // do your magic!
    try {
+     
      const body = {
         name:req.body.name
      }
@@ -16,8 +18,20 @@ router.post('/',validateUser, async (req, res) => {
    }
 });
 
-router.post('/:id/posts', async (req, res) => {
+router.post('/:id/posts', validatePost, validateUserId, async (req, res) => {
   // do your magic!
+  try {
+    console.log(req.params.id);
+    const payload = {
+       text:req.body.text,
+       user_id: req.params.id
+    }
+    console.log('line26', payload);
+    
+    res.status(201).json(await posts.insert(payload))
+  } catch(error) {
+    res.status(500).json({msg:error});
+  }
   
 });
 
@@ -98,11 +112,11 @@ function validateUser(req, res, next) {
   next();
 }
 
-function validatePost(req, res, next) {
-  // do your magic!
-  const { body } = req;
-  if(body === "undefined") res.json(400).json({ message: "missing post data" });
-  if(!body.text) res.json(400).json({message: "missing required text field" })
+function validatePost(req, res, next) {  // do your magic!
+  
+  if(!req.body) res.json(400).json({ message: "missing post data" });
+  if(!req.body.text) res.json(400).json({message: "missing required text field" });
+  next();
 }
 
 
