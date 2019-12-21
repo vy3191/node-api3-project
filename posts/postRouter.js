@@ -5,17 +5,18 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   // do your magic!
   try {
-
+    res.status(200).json(await postsDB.get());
   }catch(error) {
      next(error);
   }
   
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validatePostId, async (req, res) => {
   // do your magic!
   try {
-
+    const post  = await postsDB.getById(req.params.id);
+    res.status(200).json(post);
   }catch(error) {
      next(error);
   }
