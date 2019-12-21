@@ -22,6 +22,12 @@ app.get("/", (req,res) => {
     })
 })
 
+app.use( (error, req,res,next) => {
+    console.log(error);
+    res.status(500).json({
+        msg: `Something went wrong with server`
+    })
+})
 app.listen(PORT, () => {
    console.log(`Server is running on http://localhost:${PORT}`);
 })
