@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const { logger } = require("./middleware/logger");
 
 const userRouter = require("./users/userRouter");
-const postRouter = require("./posts/postRouter");
+
 
 const PORT = 8000;
 const app = express();
@@ -16,7 +16,7 @@ app.use(logger);
 app.use(express.json());
 
 app.use("/api/users", userRouter);
-app.use("/api/posts", postRouter);
+
 
 app.get("/", (req,res) => {
     res.status(200).json({

@@ -1,8 +1,11 @@
 const express = require('express');
 const db = require("./userDb");
 const posts = require("../posts/postDb");
+const postRouter = require("../posts/postRouter");
 
 const router = express.Router({mergeParams:true});
+
+router.use("/:id/posts", postRouter);
 
 router.post('/',validateUser, async (req, res) => {
    
